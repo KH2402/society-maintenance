@@ -2,6 +2,7 @@ package com.example.demo;
 import java.io.File;	
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,21 +20,22 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class ExcelParserController {
-	
-
-	
-   //@PostMapping("/parseExcel")
-   // public ResponseEntity<List<FlatOwner>> parseExcel(@RequestParam("file") MultipartFile file,
-    //                                                   @RequestParam("searchString") String searchString) {
-    //  
+	                                             	   
                                                     	   
-                                                    	   
-     @GetMapping("/parseFile")                                            
-     public ResponseEntity<List<FlatOwner>> parseExcel(){
+    // @GetMapping("/parseFile")                                            
+    // public ResponseEntity<List<FlatOwner>> parseExcel(){
+     
+     @PostMapping("/parseExcel")
+     public ResponseEntity<List<FlatOwner>> parseExcel(@RequestParam("file") MultipartFile file,
+    		                                            @RequestParam("searchString") String searchString) {
+    
         try {
-        	File file=new File("/C:\\Users\\krish\\OneDrive\\Desktop\\parser.xlsx");
-            FileInputStream fis = new FileInputStream(file);
-            Workbook workbook = new XSSFWorkbook(fis);
+        	//File file=new File("/C:\\Users\\krish\\OneDrive\\Desktop\\parser.xlsx");
+            //FileInputStream fis = new FileInputStream(file);
+        	//Workbook workbook = new XSSFWorkbook(fis);
+        	InputStream inputStream = file.getInputStream();
+        	Workbook workbook = new XSSFWorkbook(inputStream);
+    
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is in the first sheet
 
             List<FlatOwner> flatOwners = new ArrayList<>();
@@ -50,13 +52,7 @@ public class ExcelParserController {
 
                 FlatOwner flatOwner = new FlatOwner(wing,flatNumber, ownerName, mobileNumber, whatsappNumber, emailId);
                 flatOwners.add(flatOwner);
-                /*
-                if (flatNumber.contains(searchString) || ownerName.contains(searchString) || mobileNumber.contains(searchString) ||
-                        whatsappNumber.contains(searchString) || emailId.contains(searchString)) {
-                    FlatOwner flatOwner = new FlatOwner(wing,flatNumber, ownerName, mobileNumber, whatsappNumber, emailId);
-                    flatOwners.add(flatOwner);
-                }
-                */
+               
             }
 
             workbook.close();
@@ -70,11 +66,15 @@ public class ExcelParserController {
                     filteredFlatOwners.add(flatOwner);
                 }
             }
+            
             return new ResponseEntity<>(filteredFlatOwners, HttpStatus.OK);
-
+            
+            //return new ResponseEntity<>(flatOwners, HttpStatus.OK);
         } catch (IOException e) {
         	 e.printStackTrace();
              return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
          }
     }
+     
+    
 }

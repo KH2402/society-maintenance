@@ -23,6 +23,12 @@ public class FlatOwner {
 		this.emailId = emailId;
 	}
 
+
+	public FlatOwner() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public String getWing() {
         return wing;
     }
@@ -70,6 +76,10 @@ public class FlatOwner {
     public void setEmailId(String emailId) {
         this.emailId = emailId;
     }
+
+   
+
+
 
    
     
